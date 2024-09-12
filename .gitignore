@@ -1,0 +1,111 @@
+*.tar.gz
+
+*.exe
+src/avm-cli
+
+# autoreconf
+aclocal.m4
+autom4te.cache/
+build-aux/config.guess
+build-aux/config.sub
+build-aux/depcomp
+build-aux/install-sh
+build-aux/ltmain.sh
+build-aux/m4/libtool.m4
+build-aux/m4/lt~obsolete.m4
+build-aux/m4/ltoptions.m4
+build-aux/m4/ltsugar.m4
+build-aux/m4/ltversion.m4
+build-aux/missing
+build-aux/compile
+build-aux/test-driver
+config.log
+config.status
+configure
+libtool
+src/config/bitcoin-config.h
+src/config/bitcoin-config.h.in
+src/config/stamp-h1
+share/setup.nsi
+share/qt/Info.plist
+
+src/obj
+
+.deps
+.dirstamp
+.libs
+.*.swp
+*.*~*
+*.bak
+*.rej
+*.orig
+*.pyc
+*.o
+*.o-*
+*.a
+*.pb.cc
+*.pb.h
+
+*.log
+*.trs
+*.dmg
+
+*.json.h
+*.raw.h
+
+# Only ignore unexpected patches
+*.patch
+!depends/patches/**/*.patch
+
+#libtool object files
+*.lo
+*.la
+
+# Unit-tests
+Makefile.test
+
+# Resources cpp
+qrc_*.cpp
+
+# Mac specific
+.DS_Store
+build
+
+#lcov
+*.gcno
+*.gcda
+/*.info
+total.coverage/
+coverage_percent.txt
+
+#build tests
+linux-coverage-build
+linux-build
+win32-build
+test/config.ini
+test/cache/*
+
+/doc/doxygen/
+
+/doc/mkdocs.yml
+/doc/gen-doc-md.sh
+/doc/md/
+/doc/html/
+
+libatomicalsconsensus.pc
+contrib/devtools/split-debug.sh
+
+# vagrant
+.vagrant
+
+
+#Local Development Environment - NetBeans
+nbproject/
+
+#Local Development Environment - Eclipse
+.cproject
+.project
+.pydevproject
+
+#Local Development Environment - Visual Studio Code
+.vscode

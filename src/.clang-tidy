@@ -1,0 +1,2 @@
+Checks:      -*,boost-use-to-string,readability-braces-around-statements
+FormatStyle: file

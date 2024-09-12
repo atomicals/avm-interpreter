@@ -1,0 +1,94 @@
+language: c
+os: linux
+dist: xenial
+addons:
+  apt:
+    packages:
+      - libgmp-dev
+      - ninja-build
+install:
+  - ./travis/install_cmake.sh
+compiler:
+  - clang
+  - gcc
+env:
+  global:
+    - FIELD=auto
+    - BIGNUM=auto
+    - SCALAR=auto
+    - ENDOMORPHISM=no
+    - STATICPRECOMPUTATION=yes
+    - ECMULTGENPRECISION=auto
+    - ASM=no
+    - AUTOTOOLS_TARGET=check
+    - CMAKE_TARGET=check-secp256k1
+    - AUTOTOOLS_EXTRA_FLAGS=
+    - CMAKE_EXTRA_FLAGS=
+    - HOST=
+    - ECDH=no
+    - RECOVERY=no
+    - SCHNORR=yes
+    - EXPERIMENTAL=no
+    - JNI=no
+    - OPENSSL_TESTS=auto
+    - MULTISET=no
+  jobs:
+    - SCALAR=32bit    RECOVERY=yes
+    - SCALAR=32bit    FIELD=32bit       ECDH=yes  EXPERIMENTAL=yes  MULTISET=yes
+    - SCALAR=64bit
+    - FIELD=64bit     RECOVERY=yes
+    - FIELD=64bit     ENDOMORPHISM=yes
+    - FIELD=64bit     ENDOMORPHISM=yes  ECDH=yes  EXPERIMENTAL=yes  MULTISET=yes
+    - FIELD=64bit                       ASM=x86_64
+    - FIELD=64bit     ENDOMORPHISM=yes  ASM=x86_64
+    - FIELD=32bit     ENDOMORPHISM=yes
+    - BIGNUM=no
+    - BIGNUM=no       ENDOMORPHISM=yes  RECOVERY=yes  EXPERIMENTAL=yes  MULTISET=yes
+    - BIGNUM=no       STATICPRECOMPUTATION=no
+    - AUTOTOOLS_TARGET=distcheck       CMAKE_TARGET=install
+    - AUTOTOOLS_EXTRA_FLAGS=CPPFLAGS=-DDETERMINISTIC CMAKE_EXTRA_FLAGS=-DCMAKE_C_FLAGS=-DDETERMINISTIC
+    - AUTOTOOLS_EXTRA_FLAGS=CFLAGS=-O0               CMAKE_EXTRA_FLAGS=-DCMAKE_BUILD_TYPE=Debug
+    - AUTOTOOLS_TARGET=check-java      CMAKE_TARGET=check-secp256k1-java JNI=yes ECDH=yes EXPERIMENTAL=yes
+    - ECMULTGENPRECISION=2
+    - ECMULTGENPRECISION=8
+    - SCHNORR=no
+jobs:
+  fast_finish: true
+  include:
+    - compiler: clang
+      env: HOST=i686-linux-gnu ENDOMORPHISM=yes OPENSSL_TESTS=no
+      addons:
+        apt:
+          packages:
+            - gcc-multilib
+            - libgmp-dev:i386
+            - ninja-build
+      install: ./travis/install_cmake.sh
+    - compiler: clang
+      env: HOST=i686-linux-gnu BIGNUM=no OPENSSL_TESTS=no
+      addons:
+        apt:
+          packages:
+            - gcc-multilib
+            - ninja-build
+      install: ./travis/install_cmake.sh
+    - compiler: gcc
+      env: HOST=i686-linux-gnu ENDOMORPHISM=yes BIGNUM=no OPENSSL_TESTS=no
+      addons:
+        apt:
+          packages:
+            - gcc-multilib
+            - ninja-build
+      install: ./travis/install_cmake.sh
+    - compiler: gcc
+      env: HOST=i686-linux-gnu OPENSSL_TESTS=no
+      addons:
+        apt:
+          packages:
+            - gcc-multilib
+            - libgmp-dev:i386
+            - ninja-build
+      install: ./travis/install_cmake.sh
+script:
+ - ./travis/build_autotools.sh
+ - ./travis/build_cmake.sh
