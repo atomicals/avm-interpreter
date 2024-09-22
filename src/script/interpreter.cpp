@@ -1638,7 +1638,6 @@ bool EvalScript(std::vector<valtype> &stack, const CScript &script, uint32_t fla
                                 }
                             } break;
                             case OP_KV_DELETE: {
-                                std::cout << "OP_KV_DELETE" << std::endl;
                                 stateContext.contractStateDelete(vch1, vch2);
                                 popstack(stack); // consume element
                                 popstack(stack); // consume element
@@ -1647,11 +1646,11 @@ bool EvalScript(std::vector<valtype> &stack, const CScript &script, uint32_t fla
                                 if (vch1.size() != 36) {
                                     return set_error(serror, ScriptError::INVALID_ATOMICAL_REF_SIZE);
                                 }
-                                auto const index = CScriptNum(vch2, maxIntegerSize).getint();
+                                auto const index = CScriptNum(vch1, maxIntegerSize).getint();
                                 if (index < 0 || uint64_t(index) >= context->tx().vout().size()) {
                                     return set_error(serror, ScriptError::INVALID_AVM_WITHDRAW_NFT_OUTPUT_INDEX);
                                 }
-                                uint288 atomref(vch1);
+                                uint288 atomref(vch2);
                                 if (!stateContext.contractWithdrawNft(atomref, index)) {
                                     return set_error(serror, ScriptError::INVALID_AVM_WITHDRAW_NFT);
                                 }
@@ -1781,7 +1780,7 @@ bool EvalScript(std::vector<valtype> &stack, const CScript &script, uint32_t fla
                                 popstack(stack); // consume element
                             } break;
                             case OP_FT_WITHDRAW: {
-                                if (vch1.size() != 36) {
+                                if (vch3.size() != 36) {
                                     return set_error(serror, ScriptError::INVALID_ATOMICAL_REF_SIZE);
                                 }
                                 auto const index = CScriptNum(vch2, maxIntegerSize).getint();
@@ -1789,11 +1788,11 @@ bool EvalScript(std::vector<valtype> &stack, const CScript &script, uint32_t fla
                                     return set_error(serror, ScriptError::INVALID_AVM_WITHDRAW_FT_OUTPUT_INDEX);
                                 }
                                 auto const &output = context->tx().vout()[index];
-                                auto withdrawAmount = CScriptNum(vch3, maxIntegerSize).getint();
+                                auto withdrawAmount = CScriptNum(vch1, maxIntegerSize).getint();
                                 if (withdrawAmount <= 0 || withdrawAmount > output.nValue.GetSatoshis()) {
                                     return set_error(serror, ScriptError::INVALID_AVM_WITHDRAW_FT_AMOUNT);
                                 }
-                                uint288 atomref(vch1);
+                                uint288 atomref(vch3);
                                 if (!stateContext.contractWithdrawFt(atomref, index, withdrawAmount)) {
                                     return set_error(serror, ScriptError::INVALID_AVM_WITHDRAW_FT);
                                 }
